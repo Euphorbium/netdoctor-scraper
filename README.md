@@ -1,4 +1,4 @@
-To run, install dependancies (only lxml) listed in  requirements.txt
+To run, install dependancies  listed in  requirements.txt
 
     pip install -r requirements.txt
     python scrape.py
