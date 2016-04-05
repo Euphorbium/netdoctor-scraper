@@ -10,7 +10,7 @@ w = unicodecsv.writer(f, encoding='utf-8', lineterminator='\n')
 w.writerow(['uniqueID', 'qid', 'localID', 'title', 'poster', 'date', 'replyTo', 'content', 'infered_replies', 'tag' ],)
 
 for i in range(1, 101):
-    time.sleep(random.random() * 5)
+    time.sleep(50 + random.random() * 10)
     print 'processing page', i
     page = html.parse('http://forums.netdoctor.co.uk/discussions/p'+str(i))
     for heading in page.xpath('//*[contains(@class, "ItemContent Discussion")]/*/a'):
@@ -41,4 +41,7 @@ for i in range(1, 101):
                         inferred_replies.add(p)
                 posters.add(poster)
                 w.writerow([uniqueID, qid, localID, title, poster, date, replyTo, content, " ".join(inferred_replies), tag])
+                f.flush()
             pager += 1
+
+f.close()
