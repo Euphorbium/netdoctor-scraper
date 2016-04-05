@@ -1,5 +1,7 @@
 import unicodecsv
 import re
+import time
+import random
 from lxml import html
 
 
@@ -8,6 +10,7 @@ w = unicodecsv.writer(f, encoding='utf-8', lineterminator='\n')
 w.writerow(['uniqueID', 'qid', 'localID', 'title', 'poster', 'date', 'replyTo', 'content', 'infered_replies', 'tag' ],)
 
 for i in range(1, 101):
+    time.sleep(random.random() * 5)
     print 'processing page', i
     page = html.parse('http://forums.netdoctor.co.uk/discussions/p'+str(i))
     for heading in page.xpath('//*[contains(@class, "ItemContent Discussion")]/*/a'):
@@ -24,6 +27,7 @@ for i in range(1, 101):
         pager = 1
         while pager <= int(pagers):
             thread = html.parse(url+'/p'+str(pager))
+            time.sleep(random.random())
             for j, message in enumerate(thread.xpath('//*[@class="Message"]')):
                 inferred_replies = set()
                 localID = j-1+(pager-1)*30
