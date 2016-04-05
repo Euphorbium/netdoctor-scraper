@@ -17,9 +17,12 @@ for i in range(1, 101):
         qid = re.findall(r'netdoctor.co.uk/discussion/(\d*)', url)[0]
         thread = html.parse(url)
         posters = set()
-        pagers = thread.xpath('//*[contains(@class, "PagerWrap")]//a[last()-1]/text()') or [1]
+        try:
+            pagers = thread.xpath('//*[contains(@class, "PagerWrap")]//a[contains(@class, "Next")]/preceding-sibling::a/text()')[-1]
+        except IndexError:
+            pagers = 1
         pager = 1
-        while pager <= int(pagers[0]):
+        while pager <= int(pagers):
             thread = html.parse(url+'/p'+str(pager))
             for j, message in enumerate(thread.xpath('//*[@class="Message"]')):
                 inferred_replies = set()
