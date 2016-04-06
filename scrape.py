@@ -18,7 +18,13 @@ for i in range(1, 101):
         url = heading.attrib['href']
         tag = heading.xpath('./../..//*[contains(@class, "Category")]')[0].text_content()
         qid = re.findall(r'netdoctor.co.uk/discussion/(\d*)', url)[0]
-        thread = html.parse(url)
+        while True:
+            try:
+                thread = html.parse(url)
+            except IOError:
+                print 'stopped on', url
+                time.sleep(30)
+            break
         posters = set()
         try:
             pagers = thread.xpath('//*[contains(@class, "PagerWrap")]//a[contains(@class, "Next")]/preceding-sibling::a/text()')[-1]
@@ -26,8 +32,17 @@ for i in range(1, 101):
             pagers = 1
         pager = 1
         while pager <= int(pagers):
-            thread = html.parse(url+'/p'+str(pager))
-            time.sleep(random.random())
+            if pager == 1:
+                pass
+            else:
+                while True:
+                    try:
+                        thread = html.parse(url+'/p'+str(pager))
+                    except IOError:
+                        print 'stopped on', url
+                        time.sleep(30)
+                    break
+            time.sleep(5+random.random())
             for j, message in enumerate(thread.xpath('//*[@class="Message"]')):
                 inferred_replies = set()
                 localID = j-1+(pager-1)*30
